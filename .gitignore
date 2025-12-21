@@ -1,0 +1,11 @@
+# Ignorar carpetas pesadas de React
+node_modules/
+dist/
+build/
+.env
+
+# Ignorar basura de Visual Studio y .NET
+bin/
+obj/
+.vs/
+*.user
