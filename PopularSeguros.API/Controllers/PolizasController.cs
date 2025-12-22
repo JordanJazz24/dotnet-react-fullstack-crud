@@ -17,9 +17,12 @@ namespace PopularSeguros.API.Controllers
             _context = context;
         }
 
-        // ============================================================
-        // 1. GET: api/Polizas (Listado para la Tabla)
-        // ============================================================
+        /// <summary>
+        /// Obtiene el listado paginado de pólizas activas con información relacionada del cliente y catálogos.
+        /// </summary>
+        /// <param name="page">Número de página (base 1)</param>
+        /// <param name="pageSize">Cantidad de registros por página</param>
+        /// <returns>Lista de pólizas en formato DTO</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PolizaDto>>> GetPolizas([FromQuery] int page = 1, [FromQuery] int pageSize = 100)
         {
@@ -49,16 +52,17 @@ namespace PopularSeguros.API.Controllers
                     Aseguradora = p.Aseguradora,
                     FechaInclusion = p.FechaInclusion,
                     FechaEmision = p.FechaEmision
-
                 })
                 .ToListAsync();
 
             return Ok(polizas);
         }
 
-        // ============================================================
-        // 2. GET: api/Polizas/5 (Para cargar el formulario de Edición)
-        // ============================================================
+        /// <summary>
+        /// Obtiene una póliza específica por su número de póliza.
+        /// </summary>
+        /// <param name="id">Número de póliza</param>
+        /// <returns>Detalle de la póliza en formato DTO</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<PolizaDto>> GetPoliza(int id)
         {
@@ -75,7 +79,6 @@ namespace PopularSeguros.API.Controllers
                 return NotFound();
             }
 
-            // Mapeo manual simple
             var polizaDto = new PolizaDto
             {
                 NumeroPoliza = poliza.NumeroPoliza,
@@ -98,26 +101,25 @@ namespace PopularSeguros.API.Controllers
             return Ok(polizaDto);
         }
 
-        // ============================================================
-        // 3. POST: api/Polizas (Crear Nueva)
-        // ============================================================
+        /// <summary>
+        /// Crea una nueva póliza en el sistema.
+        /// </summary>
+        /// <param name="polizaDto">Datos de la póliza a crear</param>
+        /// <returns>La póliza creada con su número asignado</returns>
         [HttpPost]
         public async Task<ActionResult<Poliza>> PostPoliza(PolizaCreateDto polizaDto)
         {
-            // Validación de fechas lógicas
             if (polizaDto.FechaVencimiento <= polizaDto.FechaEmision)
             {
                 return BadRequest("La fecha de vencimiento debe ser posterior a la fecha de emisión.");
             }
 
-            // Validamos que el cliente exista antes de guardar
             var clienteExiste = await _context.Clientes.AnyAsync(c => c.Cedula == polizaDto.CedulaAsegurado);
             if (!clienteExiste)
             {
                 return BadRequest("El cliente con esa cédula no existe.");
             }
 
-            // Mapeamos el DTO a la Entidad de BD
             var nuevaPoliza = new Poliza
             {
                 CedulaAsegurado = polizaDto.CedulaAsegurado,
@@ -130,18 +132,21 @@ namespace PopularSeguros.API.Controllers
                 FechaVencimiento = polizaDto.FechaVencimiento,
                 Aseguradora = polizaDto.Aseguradora,
                 FechaInclusion = DateTime.Now,
-                Eliminado = false // Default
+                Eliminado = false
             };
 
             _context.Polizas.Add(nuevaPoliza);
-            await _context.SaveChangesAsync(); // Requisito: Async [cite: 24]
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetPoliza", new { id = nuevaPoliza.NumeroPoliza }, nuevaPoliza);
         }
 
-        // ============================================================
-        // 4. PUT: api/Polizas/5 (Editar)
-        // ============================================================
+        /// <summary>
+        /// Actualiza los datos de una póliza existente.
+        /// </summary>
+        /// <param name="id">Número de póliza a actualizar</param>
+        /// <param name="polizaDto">Nuevos datos de la póliza</param>
+        /// <returns>Resultado de la operación</returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPoliza(int id, PolizaCreateDto polizaDto)
         {
@@ -183,9 +188,11 @@ namespace PopularSeguros.API.Controllers
             return NoContent();
         }
 
-        // ============================================================
-        // 5. DELETE: api/Polizas/5 (Eliminado LÓGICO)
-        // ============================================================
+        /// <summary>
+        /// Realiza un borrado lógico de una póliza marcándola como eliminada.
+        /// </summary>
+        /// <param name="id">Número de póliza a eliminar</param>
+        /// <returns>Resultado de la operación</returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePoliza(int id)
         {
@@ -195,10 +202,7 @@ namespace PopularSeguros.API.Controllers
                 return NotFound();
             }
 
-            // Requisito CRÍTICO: No borrar, solo marcar como eliminado 
             poliza.Eliminado = true;
-
-            // Le decimos a EF que hubo un cambio
             _context.Entry(poliza).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();

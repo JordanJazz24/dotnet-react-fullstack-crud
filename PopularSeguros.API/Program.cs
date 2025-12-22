@@ -2,10 +2,10 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddDbContext<PopularSeguros.API.Data.AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Configurar JSON para que acepte camelCase y PascalCase
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -17,11 +17,11 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowReactApp", app =>
+    options.AddPolicy("AllowReactApp", policy =>
     {
-        app.AllowAnyOrigin()
-           .AllowAnyHeader()
-           .AllowAnyMethod();
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
     });
 });
 

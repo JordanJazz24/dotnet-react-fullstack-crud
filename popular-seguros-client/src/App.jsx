@@ -1,7 +1,7 @@
 ﻿import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import LoginPage from './pages/LoginPage'
 import PolizasPage from './pages/PolizasPage'
-import PolizaFormPage from './pages/PolizaFormPage' // Importa la nueva página
+import PolizaFormPage from './pages/PolizaFormPage'
 
 function App() {
     return (
@@ -9,8 +9,6 @@ function App() {
             <Routes>
                 <Route path="/" element={<LoginPage />} />
                 <Route path="/polizas" element={<PolizasPage />} />
-
-                {/* Rutas nuevas para Crear y Editar */}
                 <Route path="/polizas/nueva" element={<PolizaFormPage />} />
                 <Route path="/polizas/editar/:id" element={<PolizaFormPage />} />
             </Routes>

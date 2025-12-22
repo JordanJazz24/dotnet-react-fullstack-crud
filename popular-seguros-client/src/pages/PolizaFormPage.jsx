@@ -4,15 +4,13 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 const PolizaFormPage = () => {
     const navigate = useNavigate()
-    const { id } = useParams() // Captura el ID si estamos editando
+    const { id } = useParams()
     const esEdicion = !!id
 
-    // 1. ESTADOS PARA LOS CATÁLOGOS (Listas Desplegables)
     const [tipos, setTipos] = useState([])
     const [coberturas, setCoberturas] = useState([])
     const [estados, setEstados] = useState([])
 
-    // 2. ESTADO DEL FORMULARIO
     const [formData, setFormData] = useState({
         cedulaAsegurado: '',
         idTipoPoliza: '',
@@ -21,10 +19,10 @@ const PolizaFormPage = () => {
         montoAsegurado: '',
         prima: '',
         fechaEmision: '',
-        fechaVencimiento: ''
+        fechaVencimiento: '',
+        aseguradora: ''
     })
 
-    // 3. CARGAR DATOS INICIALES
     useEffect(() => {
         cargarCatalogos()
         if (esEdicion) {
@@ -34,7 +32,6 @@ const PolizaFormPage = () => {
 
     const cargarCatalogos = async () => {
         try {
-            // Llamamos a los endpoints que acabamos de crear
             const [resTipos, resCob, resEst] = await Promise.all([
                 axios.get('https://localhost:7145/api/Catalogos/Tipos'),
                 axios.get('https://localhost:7145/api/Catalogos/Coberturas'),
@@ -44,6 +41,7 @@ const PolizaFormPage = () => {
             setCoberturas(resCob.data)
             setEstados(resEst.data)
         } catch (error) {
+            console.error(error)
             alert('Error cargando listas desplegables')
         }
     }
@@ -53,7 +51,6 @@ const PolizaFormPage = () => {
             const response = await axios.get(`https://localhost:7145/api/Polizas/${idPoliza}`)
             const data = response.data
 
-            // Ajustamos las fechas para que el input type="date" las entienda (YYYY-MM-DD)
             const formatearFecha = (fecha) => fecha ? fecha.split('T')[0] : ''
 
             setFormData({
@@ -64,20 +61,20 @@ const PolizaFormPage = () => {
                 montoAsegurado: data.montoAsegurado,
                 prima: data.prima,
                 fechaEmision: formatearFecha(data.fechaEmision),
-                fechaVencimiento: formatearFecha(data.fechaVencimiento)
+                fechaVencimiento: formatearFecha(data.fechaVencimiento),
+                aseguradora: data.aseguradora || ''
             })
         } catch (error) {
+            console.error(error)
             alert('Error cargando la póliza')
         }
     }
 
-    // 4. MANEJAR CAMBIOS EN INPUTS
     const handleChange = (e) => {
         const { name, value } = e.target
         setFormData({ ...formData, [name]: value })
     }
 
-    // 5. ENVIAR FORMULARIO (Crear o Editar)
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
@@ -105,17 +102,22 @@ const PolizaFormPage = () => {
                 <div className="card-body">
                     <form onSubmit={handleSubmit}>
                         <div className="row">
-
-                            {/* Cédula */}
                             <div className="col-md-6 mb-3">
-                                <label className="form-label">Cédula Asegurado (Debe existir)</label>
+                                <label className="form-label">Cédula Asegurado</label>
                                 <input
                                     type="text" name="cedulaAsegurado" className="form-control"
                                     value={formData.cedulaAsegurado} onChange={handleChange} required
                                 />
                             </div>
 
-                            {/* Monto */}
+                            <div className="col-md-6 mb-3">
+                                <label className="form-label">Aseguradora</label>
+                                <input
+                                    type="text" name="aseguradora" className="form-control"
+                                    value={formData.aseguradora} onChange={handleChange} required
+                                />
+                            </div>
+
                             <div className="col-md-6 mb-3">
                                 <label className="form-label">Monto Asegurado</label>
                                 <input
@@ -124,7 +126,14 @@ const PolizaFormPage = () => {
                                 />
                             </div>
 
-                            {/* Listas Desplegables */}
+                            <div className="col-md-6 mb-3">
+                                <label className="form-label">Prima</label>
+                                <input
+                                    type="number" name="prima" className="form-control"
+                                    value={formData.prima} onChange={handleChange} required
+                                />
+                            </div>
+
                             <div className="col-md-4 mb-3">
                                 <label className="form-label">Tipo Póliza</label>
                                 <select
@@ -158,7 +167,6 @@ const PolizaFormPage = () => {
                                 </select>
                             </div>
 
-                            {/* Fechas */}
                             <div className="col-md-6 mb-3">
                                 <label className="form-label">Fecha Emisión</label>
                                 <input
@@ -174,15 +182,6 @@ const PolizaFormPage = () => {
                                     value={formData.fechaVencimiento} onChange={handleChange} required
                                 />
                             </div>
-
-                            <div className="col-md-12 mb-3">
-                                <label className="form-label">Prima</label>
-                                <input
-                                    type="number" name="prima" className="form-control"
-                                    value={formData.prima} onChange={handleChange} required
-                                />
-                            </div>
-
                         </div>
 
                         <div className="d-flex justify-content-end gap-2">

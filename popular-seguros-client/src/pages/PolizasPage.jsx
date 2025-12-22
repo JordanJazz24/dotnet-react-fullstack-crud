@@ -26,18 +26,13 @@ const PolizasPage = () => {
         navigate('/')
     }
 
-    // --- LÓGICA DE ELIMINAR (NUEVA) ---
     const handleDelete = async (id) => {
-        // 1. Confirmación de usuario
         if (!window.confirm(`¿Está seguro que desea eliminar la póliza #${id}?`)) {
             return
         }
 
         try {
-            // 2. Llamada a la API (Endpoint DELETE)
             await axios.delete(`https://localhost:7145/api/Polizas/${id}`)
-
-            // 3. Actualizar la tabla visualmente (filtras la que borraste)
             setPolizas(polizas.filter(p => p.numeroPoliza !== id))
             alert('Póliza eliminada correctamente.')
         } catch (error) {
@@ -46,7 +41,6 @@ const PolizasPage = () => {
         }
     }
 
-    // Función auxiliar para formatear dinero (Colones/Dólares)
     const formatMoney = (amount) => {
         return new Intl.NumberFormat('es-CR', { style: 'currency', currency: 'CRC' }).format(amount)
     }
@@ -69,14 +63,11 @@ const PolizasPage = () => {
                     </button>
                 </div>
 
-                {/* 3. TABLA DE DATOS COMPACTA */}
                 <div className="card shadow-sm">
-                    {/* Agregamos 'small' aquí para reducir un poco la fuente de toda la tabla */}
                     <div className="card-body p-0 small">
                         <div className="table-responsive">
-                            {/* Agregamos 'table-sm' para reducir el padding de las celdas */}
                             <table className="table table-sm table-striped table-hover mb-0 align-middle">
-                                <thead className="table-dark text-nowrap"> {/* text-nowrap evita que los títulos se rompan */}
+                                <thead className="table-dark text-nowrap">
                                     <tr>
                                         <th>#</th>
                                         <th>Cliente</th>
@@ -96,7 +87,6 @@ const PolizasPage = () => {
                                     {polizas.map((poliza) => (
                                         <tr key={poliza.numeroPoliza}>
                                             <td>{poliza.numeroPoliza}</td>
-                                            {/* Usamos text-truncate y un max-width para nombres muy largos */}
                                             <td style={{ maxWidth: '150px' }}>
                                                 <div className="fw-bold text-truncate" title={poliza.cedulaAsegurado}>{poliza.cedulaAsegurado}</div>
                                                 <div className="small text-muted text-truncate" title={poliza.nombreCliente}>{poliza.nombreCliente}</div>
@@ -104,23 +94,19 @@ const PolizasPage = () => {
                                             <td className="text-truncate" style={{ maxWidth: '100px' }} title={poliza.aseguradora}>{poliza.aseguradora}</td>
                                             <td>{poliza.nombreTipoPoliza}</td>
                                             <td className="text-truncate" style={{ maxWidth: '120px' }} title={poliza.nombreCobertura}>{poliza.nombreCobertura}</td>
-                                            {/* text-nowrap en montos para que no se partan en dos líneas */}
                                             <td className="text-nowrap">{formatMoney(poliza.montoAsegurado)}</td>
                                             <td className="text-nowrap">{formatMoney(poliza.prima)}</td>
-
                                             <td>{new Date(poliza.fechaEmision).toLocaleDateString()}</td>
                                             <td>{new Date(poliza.fechaVencimiento).toLocaleDateString()}</td>
                                             <td className="text-muted">{new Date(poliza.fechaInclusion).toLocaleDateString()}</td>
-
                                             <td>
                                                 <span className={`badge ${poliza.nombreEstado === 'Activa' ? 'bg-success' : 'bg-secondary'}`}>
                                                     {poliza.nombreEstado}
                                                 </span>
                                             </td>
-                                            {/* La columna de acciones ahora tiene ancho fijo mínimo para que no se aplaste */}
                                             <td className="text-end text-nowrap" style={{ minWidth: '140px' }}>
                                                 <button
-                                                    className="btn btn-sm btn-outline-primary me-1" // Reduje margen de me-2 a me-1
+                                                    className="btn btn-sm btn-outline-primary me-1"
                                                     onClick={() => navigate(`/polizas/editar/${poliza.numeroPoliza}`)}
                                                 >
                                                     Editar

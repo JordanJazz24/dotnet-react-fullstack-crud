@@ -1,26 +1,23 @@
 ﻿import { useState } from 'react'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom' // Importamos el hook de navegación
+import { useNavigate } from 'react-router-dom'
 
 const LoginPage = () => {
     const [usuario, setUsuario] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
-    const navigate = useNavigate() // Instanciamos la navegación
+    const navigate = useNavigate()
 
     const handleLogin = async (e) => {
         e.preventDefault()
         setError('')
 
         try {
-            const url = 'https://localhost:7145/api/Auth/login' // Verifica tu puerto
+            const url = 'https://localhost:7145/api/Auth/login'
             const response = await axios.post(url, { usuario, password })
 
             if (response.data.success) {
-                // 1. Guardamos el usuario en el navegador para no perderlo al recargar
                 localStorage.setItem('user', JSON.stringify(response.data.data))
-
-                // 2. Redirigimos al menú de Pólizas
                 navigate('/polizas')
             }
 

@@ -15,6 +15,10 @@ namespace PopularSeguros.API.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Obtiene el catálogo de tipos de pólizas disponibles.
+        /// </summary>
+        /// <returns>Lista de tipos de póliza</returns>
         // GET: api/Catalogos/Tipos
         [HttpGet("Tipos")]
         public async Task<IActionResult> GetTipos()
@@ -22,6 +26,10 @@ namespace PopularSeguros.API.Controllers
             return Ok(await _context.TipoPolizas.ToListAsync());
         }
 
+        /// <summary>
+        /// Obtiene el catálogo de coberturas disponibles.
+        /// </summary>
+        /// <returns>Lista de coberturas</returns>
         // GET: api/Catalogos/Coberturas
         [HttpGet("Coberturas")]
         public async Task<IActionResult> GetCoberturas()
@@ -29,6 +37,10 @@ namespace PopularSeguros.API.Controllers
             return Ok(await _context.Coberturas.ToListAsync());
         }
 
+        /// <summary>
+        /// Obtiene el catálogo de estados de póliza disponibles.
+        /// </summary>
+        /// <returns>Lista de estados de póliza</returns>
         // GET: api/Catalogos/Estados
         [HttpGet("Estados")]
         public async Task<IActionResult> GetEstados()
@@ -36,6 +48,11 @@ namespace PopularSeguros.API.Controllers
             return Ok(await _context.EstadoPolizas.ToListAsync());
         }
 
+        /// <summary>
+        /// Busca un cliente específico por su número de cédula.
+        /// </summary>
+        /// <param name="cedula">Número de cédula del cliente</param>
+        /// <returns>Información básica del cliente</returns>
         // GET: api/Catalogos/Clientes?cedula=xxx
         [HttpGet("Clientes")]
         public async Task<IActionResult> BuscarCliente([FromQuery] string cedula)

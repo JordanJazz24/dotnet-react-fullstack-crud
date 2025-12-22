@@ -18,8 +18,6 @@
         public decimal MontoAsegurado { get; set; }
         public decimal Prima { get; set; }
         public DateTime FechaVencimiento { get; set; }
-
-    
         public string Aseguradora { get; set; } = null!;
         public DateTime FechaInclusion { get; set; }
         public DateTime FechaEmision { get; set; }

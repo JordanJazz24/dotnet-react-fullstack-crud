@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PopularSeguros.API.Data;
 using PopularSeguros.API.DTOs;
-using PopularSeguros.API.Utilities; // Importante para usar la encriptación
+using PopularSeguros.API.Utilities;
 
 namespace PopularSeguros.API.Controllers
 {
@@ -17,25 +17,24 @@ namespace PopularSeguros.API.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Autentica un usuario en el sistema mediante credenciales.
+        /// </summary>
+        /// <param name="loginDto">Credenciales de acceso</param>
+        /// <returns>Información básica del usuario autenticado</returns>
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
-            // 1. Encriptamos la contraseña que viene del front
             string passHash = Encrypt.GetSHA256(loginDto.Password);
 
-            // 2. Buscamos usuario que coincida en Nombre Y Contraseña cifrada
             var usuario = await _context.Usuarios
                 .FirstOrDefaultAsync(u => u.LoginUsuario == loginDto.Usuario && u.PasswordHash == passHash);
 
-            // 3. Validación
             if (usuario == null)
             {
                 return Unauthorized(new { message = "Credenciales incorrectas" });
             }
 
-            // 4. Retornamos éxito y datos básicos (sin el password)
-            // NOTA: En un entorno productivo real aquí generaríamos un JWT Token.
-            // Para esta prueba, devolver el objeto usuario es suficiente para que React sepa que entró.
             return Ok(new
             {
                 success = true,
