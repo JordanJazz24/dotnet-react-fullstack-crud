@@ -69,11 +69,14 @@ const PolizasPage = () => {
                     </button>
                 </div>
 
+                {/* 3. TABLA DE DATOS COMPACTA */}
                 <div className="card shadow-sm">
-                    <div className="card-body p-0">
-                        <div className="table-responsive"> {/* Scroll horizontal si hay muchas columnas */}
-                            <table className="table table-striped table-hover mb-0 align-middle">
-                                <thead className="table-dark">
+                    {/* Agregamos 'small' aquí para reducir un poco la fuente de toda la tabla */}
+                    <div className="card-body p-0 small">
+                        <div className="table-responsive">
+                            {/* Agregamos 'table-sm' para reducir el padding de las celdas */}
+                            <table className="table table-sm table-striped table-hover mb-0 align-middle">
+                                <thead className="table-dark text-nowrap"> {/* text-nowrap evita que los títulos se rompan */}
                                     <tr>
                                         <th>#</th>
                                         <th>Cliente</th>
@@ -82,7 +85,7 @@ const PolizasPage = () => {
                                         <th>Cobertura</th>
                                         <th>Monto</th>
                                         <th>Prima</th>
-                                        <th>Emisi&oacute;n</th>    {/* <-- RESTAURADO */}
+                                        <th>Emisi&oacute;n</th>
                                         <th>Vencimiento</th>
                                         <th>Inclusi&oacute;n</th>
                                         <th>Estado</th>
@@ -93,33 +96,31 @@ const PolizasPage = () => {
                                     {polizas.map((poliza) => (
                                         <tr key={poliza.numeroPoliza}>
                                             <td>{poliza.numeroPoliza}</td>
-                                            <td>
-                                                <div className="fw-bold">{poliza.cedulaAsegurado}</div>
-                                                <div className="small text-muted">{poliza.nombreCliente}</div>
+                                            {/* Usamos text-truncate y un max-width para nombres muy largos */}
+                                            <td style={{ maxWidth: '150px' }}>
+                                                <div className="fw-bold text-truncate" title={poliza.cedulaAsegurado}>{poliza.cedulaAsegurado}</div>
+                                                <div className="small text-muted text-truncate" title={poliza.nombreCliente}>{poliza.nombreCliente}</div>
                                             </td>
-                                            <td>{poliza.aseguradora}</td>
+                                            <td className="text-truncate" style={{ maxWidth: '100px' }} title={poliza.aseguradora}>{poliza.aseguradora}</td>
                                             <td>{poliza.nombreTipoPoliza}</td>
-                                            <td>{poliza.nombreCobertura}</td>
-                                            <td>{formatMoney(poliza.montoAsegurado)}</td>
-                                            <td>{formatMoney(poliza.prima)}</td>
+                                            <td className="text-truncate" style={{ maxWidth: '120px' }} title={poliza.nombreCobertura}>{poliza.nombreCobertura}</td>
+                                            {/* text-nowrap en montos para que no se partan en dos líneas */}
+                                            <td className="text-nowrap">{formatMoney(poliza.montoAsegurado)}</td>
+                                            <td className="text-nowrap">{formatMoney(poliza.prima)}</td>
 
-                                            {/* DATO: Fecha Emisión */}
                                             <td>{new Date(poliza.fechaEmision).toLocaleDateString()}</td>
-
-                                            {/* DATO: Fecha Vencimiento */}
                                             <td>{new Date(poliza.fechaVencimiento).toLocaleDateString()}</td>
-
-                                            {/* DATO: Fecha Inclusión (Auditoría) */}
-                                            <td className="small text-muted">{new Date(poliza.fechaInclusion).toLocaleDateString()}</td>
+                                            <td className="text-muted">{new Date(poliza.fechaInclusion).toLocaleDateString()}</td>
 
                                             <td>
                                                 <span className={`badge ${poliza.nombreEstado === 'Activa' ? 'bg-success' : 'bg-secondary'}`}>
                                                     {poliza.nombreEstado}
                                                 </span>
                                             </td>
-                                            <td className="text-end">
+                                            {/* La columna de acciones ahora tiene ancho fijo mínimo para que no se aplaste */}
+                                            <td className="text-end text-nowrap" style={{ minWidth: '140px' }}>
                                                 <button
-                                                    className="btn btn-sm btn-outline-primary me-2"
+                                                    className="btn btn-sm btn-outline-primary me-1" // Reduje margen de me-2 a me-1
                                                     onClick={() => navigate(`/polizas/editar/${poliza.numeroPoliza}`)}
                                                 >
                                                     Editar

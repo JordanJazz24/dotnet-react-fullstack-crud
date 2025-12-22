@@ -17,7 +17,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("NuevaPolitica", app =>
+    options.AddPolicy("AllowReactApp", app =>
     {
         app.AllowAnyOrigin()
            .AllowAnyHeader()
@@ -33,7 +33,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors("NuevaPolitica");
+app.UseCors("AllowReactApp");
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
