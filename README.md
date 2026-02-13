@@ -1,72 +1,166 @@
-﻿# Popular Seguros - Sistema de Gestión de Pólizas
+# Insurance Policy Management System
 
-Solución Full Stack para la gestión de pólizas de seguros, desarrollada como prueba técnica. Implementa una arquitectura monolítica modular con **.NET 8** para el backend y **React (Vite)** para el frontend.
+A modern full-stack insurance policy management application demonstrating enterprise-level architecture and best practices. Built with **.NET 10 Web API**, **Entity Framework Core**, **React 19**, and **SQL Server**.
 
-## 📋 Requisitos Previos
+## 🚀 Tech Stack
 
-* **Visual Studio 2022** (con carga de trabajo ASP.NET y desarrollo web).
-* **SQL Server** (Express o Developer).
-* **Node.js** (v18 o superior).
-* **.NET SDK 8.0**.
+### Backend
+- **ASP.NET Core Web API 10.0** - Latest .NET framework
+- **Entity Framework Core 10.0** - ORM with Database-First approach
+- **SQL Server** - Relational database with normalization
+- **LINQ** - Data querying and manipulation
 
----
+### Frontend
+- **React 19** - Modern UI library
+- **Vite 7** - Fast build tool and dev server
+- **Bootstrap 5** - Responsive UI framework
+- **Axios** - HTTP client
+- **React Router 7** - Client-side routing
 
-## 🚀 Guía de Instalación y Ejecución
+### Architecture & Patterns
+- RESTful API design
+- DTO (Data Transfer Objects) pattern
+- Dependency Injection
+- Soft Delete implementation
+- CORS configuration
+- Entity relationships and navigation properties
 
-Sigue estos pasos en orden para levantar el proyecto localmente:
+## ✨ Features
 
-### 1. Configuración de Base de Datos
-1.  Navega a la carpeta `/Database` de este repositorio.
-2.  Abre el archivo `Script-Inicial-DB` con **SQL Server Management Studio (SSMS)**.
-3.  Ejecuta el script completo. Esto creará la base de datos `PopularSegurosDB`, las tablas y poblará los catálogos necesarios.
-    * *Nota: El script inserta un usuario administrador por defecto.*
+- ✅ Complete CRUD operations for insurance policies
+- ✅ Client management system
+- ✅ Policy type and coverage catalogs
+- ✅ Policy status tracking
+- ✅ Authentication system
+- ✅ Soft delete (logical deletion)
+- ✅ Date validation and business rules
+- ✅ Responsive user interface
+- ✅ RESTful API endpoints
 
-### 2. Configuración del Backend (.NET)
-1.  Abre el archivo `PopularSeguros.sln` con Visual Studio.
-2.  En el proyecto **PopularSeguros.API**, abre el archivo `appsettings.json`.
-3.  Verifica o ajusta la cadena de conexión `DefaultConnection` para que coincida con tu instancia local de SQL Server:
-    ```json
-    "ConnectionStrings": {
-      "DefaultConnection": "Server=YOUR_SERVER_NAME;Database=PopularSegurosDB;Trusted_Connection=True;TrustServerCertificate=True;"
-    }
-    ```
-4.  Ejecuta el proyecto (F5 o Ctrl+F5). La API se iniciará (por defecto en `https://localhost:7145`).
+## 📋 Prerequisites
 
-### 3. Configuración del Frontend (React)
-1.  Abre una terminal (PowerShell o CMD).
-2.  Navega a la carpeta del cliente:
-    ```bash
-    cd popular-seguros-client
-    ```
-3.  Instala las dependencias:
-    ```bash
-    npm install
-    ```
-4.  Inicia el servidor de desarrollo:
-    ```bash
-    npm run dev
-    ```
-5.  Abre el navegador en la URL indicada (usualmente `http://localhost:5173`).
+Before running this project, ensure you have the following installed:
 
----
+- **Visual Studio 2022** (with ASP.NET and web development workload)
+- **SQL Server** (Express or Developer edition)
+- **Node.js** (v18 or higher)
+- **.NET SDK 10.0**
+- **SQL Server Management Studio (SSMS)** (recommended)
 
-## 🔐 Credenciales de Acceso
+## 🛠️ Installation & Setup
 
-Para ingresar al sistema, utilice las siguientes credenciales de prueba generadas por el script de base de datos:
+Follow these steps to run the project locally:
 
-* **Usuario:** `admin`
-* **Contraseña:** `123456`
+### 1. Database Configuration
 
----
+1. Navigate to the `/Database` folder in this repository
+2. Open the `Script-Inicial-DB` file with **SQL Server Management Studio (SSMS)**
+3. Execute the complete script. This will:
+   - Create the `PopularSegurosDB` database
+   - Create all necessary tables
+   - Set up relationships and constraints
+   - Populate catalog data
+   - Insert a default admin user
 
-## 🛠️ Stack Tecnológico
+### 2. Backend Setup (.NET API)
 
-* **Backend:** ASP.NET Core Web API 8.0, Entity Framework Core (Database First), LINQ.
-* **Frontend:** React 18, Vite, Bootstrap 5, Axios, React Router.
-* **Base de Datos:** SQL Server (Normalización, Relaciones, Eliminado Lógico).
-* **Seguridad:** Hashing de contraseñas (SHA-256), CORS.
+1. Open the `PopularSeguros.sln` file with Visual Studio 2022
+2. In the **PopularSeguros.API** project, open the `appsettings.json` file
+3. Update the connection string to match your local SQL Server instance:
 
----
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "Server=YOUR_SERVER_NAME;Database=PopularSegurosDB;Trusted_Connection=True;TrustServerCertificate=True;"
+}
+```
 
-## 👤 Autor
-Jordan Álvarez González
+4. Build the solution (Ctrl+Shift+B)
+5. Run the project (F5 or Ctrl+F5)
+   - The API will start on `https://localhost:7145` by default
+   - Swagger/OpenAPI documentation available at `/swagger` endpoint
+
+### 3. Frontend Setup (React)
+
+1. Open a terminal (PowerShell, CMD, or your preferred terminal)
+2. Navigate to the client folder:
+
+```bash
+cd popular-seguros-client
+```
+
+3. Install dependencies:
+
+```bash
+npm install
+```
+
+4. Start the development server:
+
+```bash
+npm run dev
+```
+
+5. Open your browser at the URL shown in the terminal (usually `http://localhost:5173`)
+
+## 🔐 Default Credentials
+
+Use these credentials to log into the system (created by the database script):
+
+- **Username:** `admin`
+- **Password:** `123456`
+
+## 📁 Project Structure
+
+```
+PopularSeguros/
+├── Database/                    # SQL scripts
+│   └── Script-Inicial-DB       # Initial database setup
+├── PopularSeguros.API/         # Backend (.NET)
+│   ├── Controllers/            # API endpoints
+│   ├── Data/                   # DbContext
+│   ├── Models/                 # Entity models
+│   ├── DTOs/                   # Data transfer objects
+│   └── appsettings.json        # Configuration
+├── popular-seguros-client/     # Frontend (React)
+│   ├── src/
+│   │   ├── components/         # React components
+│   │   ├── pages/              # Page components
+│   │   └── services/           # API services
+│   └── package.json
+└── README.md
+```
+
+## 🔌 API Endpoints
+
+### Authentication
+- `POST /api/Auth/Login` - User authentication
+
+### Policies
+- `GET /api/Polizas` - Get all policies
+- `GET /api/Polizas/{id}` - Get policy by ID
+- `POST /api/Polizas` - Create new policy
+- `PUT /api/Polizas/{id}` - Update policy
+- `DELETE /api/Polizas/{id}` - Delete policy (soft delete)
+
+### Catalogs
+- `GET /api/Catalogos/Tipos` - Get policy types
+- `GET /api/Catalogos/Coberturas` - Get coverages
+- `GET /api/Catalogos/Estados` - Get policy statuses
+- `GET /api/Catalogos/Clientes?cedula={id}` - Search client by ID
+
+## 🗄️ Database Schema
+
+The system manages the following main entities:
+
+- **Cliente** (Client) - Customer information
+- **Poliza** (Policy) - Insurance policies
+- **TipoPoliza** (Policy Type) - Catalog of policy types
+- **Cobertura** (Coverage) - Insurance coverage catalog
+- **EstadoPoliza** (Policy Status) - Policy status catalog
+- **Usuario** (User) - System users
+
+All relationships are properly configured with foreign keys and navigation properties.
+
+## 👨‍💻 Author
+
+**Jordan Álvarez González**
